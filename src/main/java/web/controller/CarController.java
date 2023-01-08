@@ -5,28 +5,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import web.model.Car;
-import web.service.CarsService;
 
-import javax.annotation.PostConstruct;
+import web.service.CarsService;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class HelloController {
+public class CarController {
 
-    @Autowired
     private CarsService carsService;
 
-    private List<Car> cars = new ArrayList<>();
-
-    @PostConstruct
-    void loadData() {
-        cars.add(new Car("BMW", 250, false));
-        cars.add(new Car("Volvo", 220, true));
-        cars.add(new Car("Kia", 123, false));
-        cars.add(new Car("Mitsubishi", 200, true));
-        cars.add(new Car("Lada", 105, false));
+    @Autowired
+    public CarController(CarsService carsService) {
+        this.carsService = carsService;
     }
 
     @GetMapping(value = "/")
@@ -41,7 +32,7 @@ public class HelloController {
 
     @GetMapping(value = "/cars")
     public String printCars(ModelMap model, @RequestParam(value = "count", defaultValue = "5") int count) {
-        model.addAttribute("cars", carsService.getCars(cars, count));
+        model.addAttribute("cars", carsService.getCars(count));
         return "cars";
     }
 
